@@ -18,18 +18,26 @@
 #include <list>
 #include <string>
 
+#include "AutoFillObject.h"
+
 using std::unordered_map;
 using std::list;
 using std::string;
 
+enum XMLNodeType {
+	ELEMENT,
+	CONTAINER
+};
+
+class AutoFillObject;
+
 class XMLNode
 {
-private:
-	list<XMLNode*> * children;
-	
 public:
 	char name[50];
 	unordered_map<string, string> attributes;
+	list<XMLNode*> * children;
+	int type;
 
 public:
 	XMLNode();
@@ -39,6 +47,8 @@ public:
 	void addChild(XMLNode* node);
 
 	string getAttribute(string key);
+
+	void fillObject(AutoFillObject * object);
 };
 
 inline string XMLNode::getAttribute(string key)
@@ -54,6 +64,11 @@ inline void XMLNode::addChild(XMLNode* node)
 inline void XMLNode::addAttribute(string key, string value)
 {
 	attributes[key] = value;
+}
+
+inline void XMLNode::fillObject(AutoFillObject * object)
+{
+	object->autoFillElement(this);
 }
 
 #endif
