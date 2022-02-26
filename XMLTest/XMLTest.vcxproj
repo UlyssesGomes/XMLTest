@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClInclude Include="AutoFillObject.h" />
     <ClInclude Include="Floor.h" />
+    <ClInclude Include="FloorCollection.h" />
     <ClInclude Include="IODataFile.h" />
     <ClInclude Include="IOFileException.h" />
     <ClInclude Include="XMLNode.h" />

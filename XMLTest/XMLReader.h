@@ -16,6 +16,7 @@
 
 #include <string>
 #include <regex>
+#include <vector>
 
 #include "IODataFile.h"
 #include "XMLNode.h"
@@ -35,12 +36,14 @@ class XMLReader
 {
 private:
 	IODataFile* reader;
-	XMLNode* root;
 	XMLNode* current;
 	stack* tagStack;
 
 	cmatch match;
 	smatch stringMatch;
+
+	vector<XMLNode*> nodes;
+	int nodesCurrentSize;
 
 public:
 	XMLReader(string fileName);
@@ -48,17 +51,22 @@ public:
 
 	bool readFile() throw(IOFileException);
 
-	XMLNode * getRoot();
+	XMLNode * operator[](int i);
+	long long size();
 
-	void extractAttributes(unordered_map<string, string>& attributes, string text);
+	void extractAttributes(unordered_map<string, string>& attributes, string * text);
 private:
 	void splitText(char *line, string& tagName, string& params);
 	string extractTagName(string& line);
+
+	void fillNodeAndStack(XMLNode* node, string* name, string* param);
+
+	void addNode(XMLNode * node);
 };
 
-inline XMLNode* XMLReader::getRoot()
+inline XMLNode* XMLReader::operator[](int i)
 {
-	return root;
+	return nodes[i];
 }
 
 inline string XMLReader::extractTagName(string& line)
@@ -67,6 +75,25 @@ inline string XMLReader::extractTagName(string& line)
 	string outputName = stringMatch.str();
 	line = stringMatch.suffix();
 	return outputName;
+}
+
+inline void XMLReader::fillNodeAndStack(XMLNode* node, string* name, string* params)
+{
+	strcpy_s(node->name, name->c_str());
+	extractAttributes(node->attributes, params);
+	tagStack->push_front(node);
+	addNode(node);
+}
+
+inline long long XMLReader::size()
+{
+	return nodes.size();
+}
+
+inline void XMLReader::addNode(XMLNode* node)
+{
+	nodesCurrentSize++;
+	nodes.push_back(node);
 }
 
 #endif

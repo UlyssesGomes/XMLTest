@@ -3,16 +3,17 @@
 
 XMLReader::XMLReader(string fileName)
 {
-	root = new XMLNode();
-	current = root;
+	current = nullptr;
 	reader = new IODataFile();
 	reader->open2Read(fileName);
 	tagStack = new stack();
+	nodesCurrentSize = 0;
 }
 
 XMLReader::~XMLReader()
 {
-	delete root;
+	for (XMLNode* node : nodes)
+		delete node;
 	reader->closeReadStream();
 	delete reader;
 	delete tagStack;
@@ -30,43 +31,44 @@ bool XMLReader::readFile() throw(IOFileException)
 		if (regex_search(line, match, regex(TAG_LINE)))
 		{
 			splitText(line, tagName, params);
-			newNode = new XMLNode();
+			newNode = new XMLNode(XML_ELEMENT);
 			strcpy_s(newNode->name, tagName.c_str());
-			extractAttributes(newNode->attributes, params);
-			current->addChild(newNode);
-			//cout << "N: " << tagName << " P: " << params << endl;
+			extractAttributes(newNode->attributes, &params);
+			if (current)
+				current->addChild(newNode);
+			else
+				addNode(newNode);
 		}
 		else if (regex_search(line, match, regex(TAG_CONTAINER_BEGIN)))
 		{
 			splitText(line, tagName, params);
-			//cout << "openN: " << tagName << " P: " << params << endl;
-			if (tagStack->size() != 0)
+
+			if (nodesCurrentSize > 0)
 			{
 				newNode = new XMLNode();
-				
-				strcpy_s(newNode->name, tagName.c_str());
-				extractAttributes(newNode->attributes, params);
-				current->addChild(newNode);
-				tagStack->push_front(current);
+				if (current)
+					current->addChild(newNode);
+
+				fillNodeAndStack(newNode, &tagName, &params);
 				current = newNode;
 			}
-			else 
+			else if (nodesCurrentSize == 0)
 			{
-				strcpy_s(current->name, tagName.c_str());
-				extractAttributes(root->attributes, params);
-				tagStack->push_front(root);
-			}	
+				current = new XMLNode();
+				fillNodeAndStack(current, &tagName, &params);
+			}
 		}
 		else if (regex_search(line, match, regex(TAG_CONTAINER_END)))
 		{
 			params = match.str();
 			tagName = extractTagName(params);
-			//cout << "closeN: " << tagName << endl;
 			if (!strcmp(tagStack->front()->name, tagName.c_str()))
 			{
 				tagStack->pop_front();
 				if (tagStack->size())
 					current = tagStack->front();
+				else
+					current = nullptr;
 			}
 			else
 				throw IOFileException("Closed tag is different.");
@@ -86,10 +88,10 @@ void XMLReader::splitText(char * line, string& tagName, string& params)
 	params = regex_replace(params, regex("<|>|/"), "");
 }
 
-void XMLReader::extractAttributes(unordered_map<string, string>& attributes, string text)
+void XMLReader::extractAttributes(unordered_map<string, string>& attributes, string * text)
 {
 	regex paramsRegex(ONLY_PARAMS);
-	regex_iterator<string::iterator> regexItBegin(text.begin(), text.end(), paramsRegex);
+	regex_iterator<string::iterator> regexItBegin(text->begin(), text->end(), paramsRegex);
 	regex_iterator<string::iterator> regexItEnd;
 	
 	string stringParam;
@@ -111,3 +113,4 @@ void XMLReader::extractAttributes(unordered_map<string, string>& attributes, str
 		regexItBegin++;
 	}
 }
+

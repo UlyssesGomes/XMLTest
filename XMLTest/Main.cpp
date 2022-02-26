@@ -4,6 +4,7 @@
 #include "IODataFile.h"
 #include "XMLReader.h"
 #include "Floor.h"
+#include "FloorCollection.h"
 
 using namespace std;
 
@@ -19,18 +20,16 @@ int main()
     total = (end - start);
     cout << "Total: " << total << "ms" << endl;
 
-    XMLNode * node = reader.getRoot();
-
-    for (auto u = node->children->begin(); u != node->children->end(); u++)
+    FloorCollection cFloor;
+    XMLNode* node;
+    for (int u = 0; u < reader.size(); u++)
     {
-        (*u)->fillObject(&floor);
-        floor.print();
+        node = reader[u];
+        cFloor.autoFillElement(node);
+        cFloor.print();
     }
 
-    // TODO - botar a variável children privada e implementar uma classe que 
-    // preencha a si mesma quando for um modelo container e não só element.
-    // Em seguida ver uma forma que o XMLReader lê vários elements e não só
-    // um container.
+    // TODO - verificar porque subiu o tempo de execução
 
 	return 0;
 }

@@ -26,7 +26,7 @@ public:
 
 void Floor::autoFillElement(XMLNode * node)
 {
-	if (node->type == ELEMENT)
+	if (node->type == XML_ELEMENT)
 	{
 		fileName = node->attributes["name"];
 		width = stoi(node->attributes["width"]);
