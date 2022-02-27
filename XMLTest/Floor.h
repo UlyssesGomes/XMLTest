@@ -21,8 +21,27 @@ public:
 
 	void autoFillElement(XMLNode * node);
 
+	string getFileName();
+	int getWidth();
+	int getHeight();
+
 	void print();
 };
+
+string Floor::getFileName()
+{
+	return fileName;
+}
+
+int Floor::getWidth()
+{
+	return width;
+}
+
+int Floor::getHeight()
+{
+	return height;
+}
 
 void Floor::autoFillElement(XMLNode * node)
 {

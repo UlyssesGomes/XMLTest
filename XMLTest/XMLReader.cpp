@@ -1,22 +1,41 @@
 #include <string>
 #include "XMLReader.h"
 
+XMLReader::XMLReader()
+{
+	current = nullptr;
+	reader = new IODataFile();
+	tagStack = new stack();
+}
+
 XMLReader::XMLReader(string fileName)
 {
 	current = nullptr;
 	reader = new IODataFile();
-	reader->open2Read(fileName);
 	tagStack = new stack();
-	nodesCurrentSize = 0;
+	openFile(fileName);
 }
 
 XMLReader::~XMLReader()
 {
-	for (XMLNode* node : nodes)
-		delete node;
-	reader->closeReadStream();
+	closeAndClean();
 	delete reader;
 	delete tagStack;
+}
+
+void XMLReader::openFile(string fileName)
+{
+	reader->open2Read(fileName);
+	nodesCurrentSize = 0;
+}
+
+void XMLReader::closeAndClean()
+{
+	for (XMLNode* node : nodes)
+		delete node;
+	nodesCurrentSize = 0;
+	nodes.resize(0);
+	reader->closeReadStream();
 }
 
 bool XMLReader::readFile() throw(IOFileException)
@@ -113,4 +132,3 @@ void XMLReader::extractAttributes(unordered_map<string, string>& attributes, str
 		regexItBegin++;
 	}
 }
-

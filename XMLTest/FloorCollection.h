@@ -12,9 +12,8 @@ using namespace std;
 
 class FloorCollection : public AutoFillObject
 {
-private:
+public:
 	string imagePath;
-
 	list<Floor*> floorList;
 
 public:

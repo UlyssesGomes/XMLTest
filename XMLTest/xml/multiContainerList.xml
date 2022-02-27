@@ -1,0 +1,18 @@
+<TextureAtlas imagePath="sheet1.png">
+	<SubTexture name="landscapeTiles_000.png" x="265" y="1057" width="132" height="83"/>
+	<SubTexture name="landscapeTiles_001.png" x="265" y="1452" width="132" height="99"/>
+	<SubTexture name="landscapeTiles_002.png" x="265" y="1369" width="132" height="83"/>
+	<SubTexture name="landscapeTiles_003.png" x="265" y="1682" width="132" height="83"/>
+</TextureAtlas>
+<TextureAtlas imagePath="sheet2.png">
+	<SubTexture name="landscapeTiles_100.png" x="265" y="1057" width="132" height="83"/>
+	<SubTexture name="landscapeTiles_101.png" x="265" y="1452" width="132" height="99"/>
+	<SubTexture name="landscapeTiles_102.png" x="265" y="1369" width="132" height="83"/>
+	<SubTexture name="landscapeTiles_103.png" x="265" y="1682" width="132" height="83"/>
+</TextureAtlas>
+<TextureAtlas imagePath="sheet3.png">
+	<SubTexture name="landscapeTiles_200.png" x="265" y="1057" width="132" height="83"/>
+	<SubTexture name="landscapeTiles_201.png" x="265" y="1452" width="132" height="99"/>
+	<SubTexture name="landscapeTiles_202.png" x="265" y="1369" width="132" height="83"/>
+	<SubTexture name="landscapeTiles_203.png" x="265" y="1682" width="132" height="83"/>
+</TextureAtlas>

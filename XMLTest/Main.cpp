@@ -29,7 +29,5 @@ int main()
         cFloor.print();
     }
 
-    // TODO - verificar porque subiu o tempo de execução
-
 	return 0;
 }

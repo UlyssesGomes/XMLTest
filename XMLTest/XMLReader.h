@@ -46,8 +46,12 @@ private:
 	int nodesCurrentSize;
 
 public:
+	XMLReader();
 	XMLReader(string fileName);
 	~XMLReader();
+
+	void openFile(string fileName);
+	void closeAndClean();
 
 	bool readFile() throw(IOFileException);
 
