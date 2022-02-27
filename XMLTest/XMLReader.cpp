@@ -1,12 +1,16 @@
 #include <string>
 #include "XMLReader.h"
 
+//----------------------------------------------------------------------------------------
+
 XMLReader::XMLReader()
 {
 	current = nullptr;
 	reader = new IODataFile();
 	tagStack = new stack();
 }
+
+//----------------------------------------------------------------------------------------
 
 XMLReader::XMLReader(string fileName)
 {
@@ -16,6 +20,8 @@ XMLReader::XMLReader(string fileName)
 	openFile(fileName);
 }
 
+//----------------------------------------------------------------------------------------
+
 XMLReader::~XMLReader()
 {
 	closeAndClean();
@@ -23,11 +29,15 @@ XMLReader::~XMLReader()
 	delete tagStack;
 }
 
+//----------------------------------------------------------------------------------------
+
 void XMLReader::openFile(string fileName)
 {
 	reader->open2Read(fileName);
 	nodesCurrentSize = 0;
 }
+
+//----------------------------------------------------------------------------------------
 
 void XMLReader::closeAndClean()
 {
@@ -37,6 +47,8 @@ void XMLReader::closeAndClean()
 	nodes.resize(0);
 	reader->closeReadStream();
 }
+
+//----------------------------------------------------------------------------------------
 
 bool XMLReader::readFile() throw(IOFileException)
 {
@@ -100,12 +112,16 @@ bool XMLReader::readFile() throw(IOFileException)
 	return true;
 }
 
+//----------------------------------------------------------------------------------------
+
 void XMLReader::splitText(char * line, string& tagName, string& params)
 {
 	params = match.str();
 	tagName = extractTagName(params);
 	params = regex_replace(params, regex("<|>|/"), "");
 }
+
+//----------------------------------------------------------------------------------------
 
 void XMLReader::extractAttributes(unordered_map<string, string>& attributes, string * text)
 {
